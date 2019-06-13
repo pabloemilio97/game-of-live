@@ -28,35 +28,34 @@ defmodule GameOfLive.BasicCell do
 
   # Cell API
   def start_link(life), do: GenServer.start(__MODULE__, {life, []})
-  def setup(pid, neighbours), do: GenServer.cast(pid, {:setup, [neighbours]})
+  def setup(pid, neighbours), do: GenServer.cast(pid, {:setup, neighbours})
   def run(pid), do: GenServer.cast(pid, :run)
-  def are_you(pid), do: GenServer.call(pid, :are_you)
-
+  
+  defp are_you(pid), do: GenServer.call(pid, :are_you)
 
   defp count(neighbours) do
-      neighbours
-      |> Enum.map(fn pid -> are_you(pid) end)
-      |> Enum.filter(fn life -> life == :alive end)
-      |> Enum.count()
+    neighbours
+    |> Enum.map(fn pid -> are_you(pid) end)
+    |> Enum.filter(fn life -> life == :alive end)
+    |> Enum.count()
   end
 
   # Cell rules; may be implemented as a protocol 
   # or anonymous function in the future, imagine
   # passing the function as part of is behaviour :)
-  defp rules(:live, count)
+  defp rules(:alive, count)
        when count < 2,
        do: :dead
-  defp rules(:live, count)
+  defp rules(:alive, count)
        when count == 2
        when count == 3,
        do: :alive
-  defp rules(:live, count)
+  defp rules(:alive, count)
        when count > 3,
        do: :dead
   defp rules(:dead, count)
        when count == 3,
        do: :alive
   defp rules(life, _count), do: life
-       do: life
 end
 
