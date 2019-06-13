@@ -1,4 +1,4 @@
-defmodule GameOfLive.Cell do
+defmodule GameOfLive.BasicCell do
   use GenServer
 
   # Genserver callbacks
@@ -27,6 +27,5 @@ defmodule GameOfLive.Cell do
   def start_link(state), do: GenServer.start(__MODULE__, state)
   def are_you(pid), do: GenServer.call(pid, :are_you)
   def live(pid), do: GenServer.cast(pid, :live)
-
 end
 
