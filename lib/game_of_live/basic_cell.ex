@@ -1,5 +1,6 @@
 defmodule GameOfLive.BasicCell do
   use GenServer
+  import Rules.Conways 
 
   # Genserver callbacks
   def init(state) do
@@ -40,22 +41,5 @@ defmodule GameOfLive.BasicCell do
     |> Enum.count()
   end
 
-  # Cell rules; may be implemented as a protocol 
-  # or anonymous function in the future, imagine
-  # passing the function as part of is behaviour :)
-  defp rules(:alive, count)
-       when count < 2,
-       do: :dead
-  defp rules(:alive, count)
-       when count == 2
-       when count == 3,
-       do: :alive
-  defp rules(:alive, count)
-       when count > 3,
-       do: :dead
-  defp rules(:dead, count)
-       when count == 3,
-       do: :alive
-  defp rules(life, _count), do: life
 end
 
