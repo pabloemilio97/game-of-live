@@ -1,5 +1,4 @@
 defmodule Rules.Conways do
-
   # Cell rules; may be implemented as a protocol 
   # or anonymous function in the future, imagine
   # passing the function as part of is behaviour :)
