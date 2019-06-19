@@ -1,4 +1,4 @@
-defmodule GameOfLive.Grid do
+defmodule GameOfLive.Arrangement.Grid do
 
   def grid_adjacency(position, dimensions = {x, y}) do
     position

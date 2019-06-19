@@ -1,4 +1,4 @@
-defmodule GameOfLive.BasicCell do
+defmodule GameOfLive.Cell.Basic do
   use GenServer
   import Rules.Conways 
 
