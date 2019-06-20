@@ -5,16 +5,19 @@ defmodule GameOfLive.Rules.Conways do
   def rules(:alive, count)
       when count < 2,
       do: :dead
+
   def rules(:alive, count)
       when count == 2
       when count == 3,
       do: :alive
+
   def rules(:alive, count)
       when count > 3,
       do: :dead
+
   def rules(:dead, count)
       when count == 3,
       do: :alive
-  def rules(life, _count), do: life
 
+  def rules(life, _count), do: life
 end

@@ -1,10 +1,9 @@
 defmodule GameOfLive.Arrangement.Grid do
-
-  def grid_adjacency(position, dimensions = {x, y}) do
+  def grid_adjacency(position, {x, y}) do
     position
     |> calculate_positions()
-    |> Enum.filter(fn {px, py} -> px >= 0 and py >= 0 end) 
-    |> Enum.filter(fn {px, py} -> px <= x and py <= y end) 
+    |> Enum.filter(fn {px, py} -> px >= 0 and py >= 0 end)
+    |> Enum.filter(fn {px, py} -> px <= x and py <= y end)
   end
 
   defp calculate_positions({x, y}) do
@@ -19,5 +18,4 @@ defmodule GameOfLive.Arrangement.Grid do
       {x + 1, y + 1}
     ]
   end
-
 end

@@ -1,6 +1,6 @@
 defmodule GameOfLive.Cell.Basic do
   use GenServer
-  import Rules.Conways 
+  import GameOfLive.Rules.Conways
 
   # Public API
   def start_link(life), do: GenServer.start(__MODULE__, {life, []})
@@ -41,4 +41,3 @@ defmodule GameOfLive.Cell.Basic do
     |> Enum.count()
   end
 end
-
