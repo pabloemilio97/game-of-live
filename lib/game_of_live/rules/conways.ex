@@ -1,23 +1,22 @@
 defmodule GameOfLive.Rules.Conways do
-  # Cell rules; may be implemented as a protocol 
-  # or anonymous function in the future, imagine
-  # passing the function as part of is behaviour :)
-  def rules(:alive, count)
+  @behaviour GameOfLive.Rules
+
+  def rule(:alive, count)
       when count < 2,
       do: :dead
 
-  def rules(:alive, count)
+  def rule(:alive, count)
       when count == 2
       when count == 3,
       do: :alive
 
-  def rules(:alive, count)
+  def rule(:alive, count)
       when count > 3,
       do: :dead
 
-  def rules(:dead, count)
+  def rule(:dead, count)
       when count == 3,
       do: :alive
 
-  def rules(life, _count), do: life
+  def rule(life, _count), do: life
 end

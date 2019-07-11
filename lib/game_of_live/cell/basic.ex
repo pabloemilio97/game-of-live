@@ -1,25 +1,29 @@
 defmodule GameOfLive.Cell.Basic do
-  use GenServer
-  import GameOfLive.Rules.Conways
-
-  # Public API
-  def start_link(life), do: GenServer.start(__MODULE__, {life, []})
-  def setup(pid, neighbours), do: GenServer.cast(pid, {:setup, neighbours})
-  def run(pid), do: GenServer.cast(pid, :run)
+  def setup(pid, life, neighbours), do: GenServer.cast(pid, {:setup, life, neighbours})
+  def run(pid), do: GenServer.cast(pid, :look_around)
   def are_you(pid), do: GenServer.call(pid, :are_you)
 
-  # Genserver callbacks
-  def init(state) do
+  import GameOfLive.Rules.Conways
+  use GenServer
+  alias GameOfLive.Arrangement.Grid
+
+  def start_link(coor = {_x, _y}) do
+    name = Grid.to_string(coor)
+    GenServer.start_link(__MODULE__, [], name: name)
+  end
+
+  def init(_init_params) do
+    state = {:dead, []}
     {:ok, state}
   end
 
-  def handle_cast({:setup, neighbours}, {life, _}) do
-    {:noreply, {life, neighbours}}
-  end
-
-  def handle_cast(:run, state) do
+  def handle_cast(:look_around, state) do
     send(self(), :look_around)
     {:noreply, state}
+  end
+
+  def handle_cast({:setup, life, neighbours}, {_, _}) do
+    {:noreply, {life, neighbours}}
   end
 
   def handle_call(:are_you, _from, state = {life, _}) do
@@ -27,16 +31,15 @@ defmodule GameOfLive.Cell.Basic do
   end
 
   def handle_info(:look_around, {life, neighbours}) do
-    life = rules(life, count(neighbours))
-    IO.puts("#{inspect(self())}, #{life}")
+    life = rule(life, count(neighbours))
     :erlang.send_after(1500, self(), :look_around)
+    IO.puts("Cell #{inspect self()} is #{life}")
     {:noreply, {life, neighbours}}
   end
 
-  # Helper functions
   defp count(neighbours) do
     neighbours
-    |> Enum.map(fn pid -> are_you(pid) end)
+    |> Enum.map(fn pid -> GenServer.call(pid, :are_you, 15_000) end)
     |> Enum.filter(fn life -> life == :alive end)
     |> Enum.count()
   end
